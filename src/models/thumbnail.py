@@ -1,12 +1,10 @@
+
 from .base_object import CreatedObject
 
 from dataclasses import dataclass
 from dataclasses import field
 from typing import List
 from datetime import datetime
-from .thumbnail import Thumbnail
-from .brand import Brand
-import json
 #what data does an item have, in the context of how it relates to other parts of the site
 #what behavior does an item have, in the context of other objects
 
@@ -15,7 +13,7 @@ import json
 #a collection can add an item
 
 @dataclass
-class Item(CreatedObject):
+class Thumbnail(CreatedObject):
     """Item domain object.
 
     Models the item object within the context of the ClothDB Domain
@@ -31,21 +29,15 @@ class Item(CreatedObject):
         colors:
         materials:
     """
-    id: int
+    filename: int
     #release_date: datetime
     #price: float
-    brand: Brand
-    thumbnails: List[Thumbnail]
+    #brand: str
     #category: str
     #subcategory: str
     #colors: List[str]
     #materials: List[str]
 
-    #consider moving this to the repository file
-    def to_json(self):
+    def test(self):
         """Performs operation blah."""
-        dict_rep = {'id': self.id,
-                    'name': self.name,
-                    'brand': self.brand.name,
-                    'thumbnails': [thumbnail.filename for thumbnail in self.thumbnails]}
-        return dict_rep
+        print('aight fam')
