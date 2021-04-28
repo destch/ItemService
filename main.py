@@ -10,14 +10,30 @@ from src.models import item
 import json
 
 
+#ORM section start the mappers to the domain objects
+#orm.start_mappers()
+
+session_factory = sessionmaker(bind=(create_engine(config.get_db_uri())))
+Session = scoped_session(session_factory)
+
 def recently_added(environ, start_response):
     start_response('200 OK', [ ('Content-type', 'text/json'),
                               ('Access-Control-Allow-Origin', '*')])
-    session = db()
-    #this logic should be moved into a repository script
+
+    session = Session()
+    items = repository.ItemRepository(session)
+    try:
+        start_response('200 OK', [ ('Content-type', 'text/json'),
+                               ('Access-Control-Allow-Origin', '*')])
+        results = items.list(limit=16, order_by=True)
+    except:
+        results =
+    finally:
+        Session.remove()
+
+    #his logic should be moved into a repository script
     #the call should really be ItemsRepo.get_recently_added(limit=16)
     #make sure you filter out deleted items
-    results = session().query(item.Item).order_by(item.Item.id.desc()).limit(16).all()
     result = {'results': [r.to_json() for r in results]}
     yield json.dumps(result).encode('utf-8')
 
